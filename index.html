@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>LOVE ME</title>
+  <title>TIDUR</title>
   <style>
     body, html {
       margin: 0;
@@ -95,9 +95,8 @@
       var targetPoints = [];
       
       var pulse = function (kx, ky) {
-        // --- BAGIAN PENGATUR UKURAN ---
         var minSize = Math.min(width, height);
-        // Angka 600 di bawah ini yang bikin kecil (semakin besar angkanya, hati semakin kecil)
+        // Ukuran Hati (Makin besar angka 600, makin kecil hatinya)
         var responsiveScale = minSize / 600; 
         
         var scaleX = 180 * responsiveScale; 
@@ -136,14 +135,42 @@
       var time = 0;
 
       var loop = function () {
+        // Logika Detak Jantung
         var n = -Math.cos(time);
+        
+        // Mengatur kecepatan detak
         time += (Math.sin(time) < 0 ? 9 : n > 0.8 ? 0.2 : 1) * config.timeDelta;
         
+        // Memanggil fungsi pulse untuk partikel
         pulse((1 + n) * 0.5, (1 + n) * 0.5);
 
+        // Membersihkan layar dengan efek trail transparan
         ctx.fillStyle = "rgba(0,0,0,.1)";
         ctx.fillRect(0, 0, width, height);
 
+        // --- MULAI KODE TEKS ---
+        ctx.save();
+        
+        // Ukuran font responsif terhadap layar
+        var baseSize = Math.min(width, height) / 25; 
+        // Membuat font ikut membesar/mengecil sesuai detak (variable n)
+        var pulseSize = baseSize + (n * 5); 
+        
+        ctx.font = "bold " + pulseSize + "px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        
+        // Warna Putih dengan efek Glow Pink
+        ctx.fillStyle = "rgba(255, 255, 255, 1)";
+        ctx.shadowColor = "rgba(255, 50, 100, 1)"; // Warna glow
+        ctx.shadowBlur = 15 + (n * 5); // Glow juga ikut berdetak
+        
+        // Menggambar teks di tengah
+        ctx.fillText("NELL TIDUR", width / 2, height / 2);
+        ctx.restore();
+        // --- SELESAI KODE TEKS ---
+
+        // Menggambar Partikel Hati
         for (var i = e.length; i--; ) {
           var u = e[i];
           var q = targetPoints[u.q];
